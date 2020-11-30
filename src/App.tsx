@@ -270,8 +270,8 @@ const Map = () => {
     const map = new mapboxgl.Map({
       container: mapContainerRef.current,
       style: "mapbox://styles/mapbox/streets-v11",
-      center: [-84.548369, 38.047876],
-      zoom: 10.5,
+      center: [-96, 37.8],
+      zoom: 2,
     });
 
     map.on("load", () => {
@@ -322,6 +322,75 @@ const Map = () => {
             "hospitals"
           );
         }
+      });
+
+      map.addSource("markers", {
+        type: "geojson",
+        data: {
+          type: "FeatureCollection",
+          features: [
+            {
+              type: "Feature",
+              geometry: {
+                type: "Point",
+                coordinates: [-77, 39],
+              },
+              properties: {
+                title: "A",
+                "marker-symbol": "default_marker",
+              },
+            },
+            {
+              type: "Feature",
+              geometry: {
+                type: "Point",
+                coordinates: [-122, 38],
+              },
+              properties: {
+                title: "B",
+                "marker-color": "#ff00ff",
+                "marker-symbol": "secondary_marker",
+              },
+            },
+          ],
+        },
+      });
+      map.addLayer({
+        id: "markers",
+        source: "markers",
+        type: "circle",
+        paint: {
+          "circle-radius": 10,
+          "circle-color": "#007cbf",
+        },
+      });
+      let line = {
+        type: "LineString",
+        coordinates: [
+          [-77, 39],
+          [-90, 50],
+          [-122, 38],
+        ],
+      };
+      let data25: any = {
+        type: "FeatureCollection",
+        features: [
+          {
+            type: "Feature",
+            geometry: line,
+          },
+        ],
+      };
+      map.addLayer({
+        id: "line",
+        source: {
+          type: "geojson",
+          data: data25,
+        },
+        type: "line",
+        paint: {
+          "line-color": "black",
+        },
       });
 
       map.addSource("route", {
